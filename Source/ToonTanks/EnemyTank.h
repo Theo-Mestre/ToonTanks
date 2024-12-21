@@ -18,8 +18,12 @@ public:
 	AEnemyTank();
 	virtual void Tick(float DeltaTime) override;
 	virtual void Aim(FVector Value = FVector()) override;
+	virtual void EngageTarget(float DeltaTime);
 
-public:
+protected:
+	virtual void BeginPlay() override;	
+
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	ATank* TargetTanks = nullptr;
 
@@ -29,7 +33,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	float Range = 100.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float TimeSinceLastShot = 0.0f;
 
-protected:
-	virtual void BeginPlay() override;	
+private:
+	class UBillboardComponent* BillboardComponent;
 };

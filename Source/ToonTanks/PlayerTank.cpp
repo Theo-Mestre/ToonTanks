@@ -8,11 +8,6 @@ APlayerTank::APlayerTank()
 {
 }
 
-void APlayerTank::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
 void APlayerTank::Move(float Value)
 {
 	FVector direction = GetActorForwardVector();
@@ -28,7 +23,7 @@ void APlayerTank::RotateHull(float Value)
 	SetActorRotation(rotator);
 }
 
-void APlayerTank::Aim(FVector Value)
+void APlayerTank::Aim(FVector Location)
 {
 	if (!TankTurret)
 	{
@@ -36,13 +31,7 @@ void APlayerTank::Aim(FVector Value)
 		return;
 	}
 
-	FRotator rotator = FRotationMatrix::MakeFromX(Value).Rotator();
-	rotator.Pitch = 0.0f;
-	rotator.Roll = 0.0f;
-	TankTurret->SetRelativeRotation(rotator);
-}
-
-void APlayerTank::BeginPlay()
-{
-	Super::BeginPlay();
+	FVector AimDirection = (Location - GetActorLocation()).GetSafeNormal();
+	AimDirection.Z = 0.0f;
+	TankTurret->SetWorldRotation(AimDirection.Rotation());
 }

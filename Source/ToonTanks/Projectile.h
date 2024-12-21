@@ -12,8 +12,6 @@ class TOONTANKS_API AProjectile : public AActor
 public:	
 	AProjectile();
 
-	virtual void Tick(float DeltaTime) override;
-
 	void OnHit(AActor* other);
 
 	void FireInDirection(const FVector& ShootDirection);
@@ -21,7 +19,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ApplyDamage(AActor* other);
 
-public:
+protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile")
 	class UProjectileMovementComponent* ProjectileMovement;
 
@@ -42,7 +40,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Projectile")
 	class UParticleSystemComponent* OnDestroyParticleSystem;
-
-protected:
-	virtual void BeginPlay() override;
 };

@@ -15,13 +15,8 @@ class TOONTANKS_API APlayerTank : public ATank
 	GENERATED_BODY()
 	
 public:
-
 	APlayerTank();
-	virtual void Tick(float DeltaTime) override;
 	virtual void Move(float Value) override;
 	virtual void RotateHull(float Value) override;
-	virtual void Aim(FVector Value) override;
-
-protected:
-	virtual void BeginPlay() override;
+	virtual void Aim(FVector Location) override;
 };

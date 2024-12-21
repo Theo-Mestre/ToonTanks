@@ -17,11 +17,6 @@ ATank::ATank()
 	TankTurret->SetupAttachment(TankHull);
 }
 
-void ATank::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
 void ATank::Move(float Value)
 {
 }
@@ -30,7 +25,7 @@ void ATank::RotateHull(float Value)
 {
 }
 
-void ATank::Aim(FVector Value)
+void ATank::Aim(FVector Location)
 {
 }
 
@@ -42,6 +37,7 @@ void ATank::Shoot(FVector _origin)
 		return;
 	}
 
+	// Construct projectile
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.bDeferConstruction = false;
 	SpawnParams.Owner = GetOwner();
@@ -54,6 +50,7 @@ void ATank::Shoot(FVector _origin)
 	projectile->SetInstigator(GetInstigator());
 	projectile->FireInDirection(-projectile->GetActorRightVector());
 
+	// Play shot SFX
 	if (ShotSound == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("No shot sound set"));
@@ -68,18 +65,15 @@ void ATank::ApplyDamage(float Damage)
 	Health -= Damage;
 	if (Health > 0) return;
 	
+	// Destroy the actor its life fall below 0
+
 	Destroy();
 	
+	// Play Death Sound
 	if (DeathSound == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("No death sound set"));
 		return;
 	}
-	
 	UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
-}
-
-void ATank::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }

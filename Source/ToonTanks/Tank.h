@@ -17,8 +17,6 @@ class TOONTANKS_API ATank
 public:
 	ATank();
 
-	virtual void Tick(float DeltaTime) override;
-
 	UFUNCTION(BlueprintCallable)
 	virtual void Move(float Value);
 
@@ -26,19 +24,21 @@ public:
 	virtual void RotateHull(float Value);
 
 	UFUNCTION(BlueprintCallable)
-	virtual void Aim(FVector Value);
+	virtual void Aim(FVector Location);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Shoot(FVector _origin);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ApplyDamage(float Damage) override;
+
 	UFUNCTION(BlueprintCallable)
 	virtual float GetDamange() override { return Health; }
 
-public:
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank")
 	UStaticMeshComponent* TankHull;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank")
 	UStaticMeshComponent* TankTurret;
 
@@ -59,6 +59,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank")
 	class USoundCue* DeathSound;
-protected:
-	virtual void BeginPlay() override;
 };

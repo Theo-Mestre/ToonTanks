@@ -9,21 +9,25 @@ AProjectile::AProjectile()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Setup Capsule component
 	CollisionComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Collision Component"));
 	CollisionComponent->SetCollisionProfileName(TEXT("Projectile"));
 	CollisionComponent->SetWorldRotation(FRotator(0.0f, 90.0f, 0.0f));
 	CollisionComponent->SetCapsuleSize(10.0f, 22.0f);
 	RootComponent = CollisionComponent;
 
+	// Setup Projectile component
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement"));
 	ProjectileMovement->SetUpdatedComponent(CollisionComponent);
 	ProjectileMovement->InitialSpeed = MovementSpeed;
 	ProjectileMovement->MaxSpeed = MovementSpeed;
 	ProjectileMovement->bShouldBounce = false;
 
+	// Setup Projectile Mesh
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Projectile Mesh"));
 	ProjectileMesh->SetupAttachment(CollisionComponent);
 
+	// Setup Particles
 	TrailParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle System"));
 	TrailParticleSystem->SetupAttachment(CollisionComponent);
 	TrailParticleSystem->SetAutoActivate(true);
@@ -31,18 +35,6 @@ AProjectile::AProjectile()
 	OnDestroyParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("On Destroy Particle System"));
 	OnDestroyParticleSystem->SetupAttachment(CollisionComponent);
 	OnDestroyParticleSystem->SetAutoActivate(false);
-}
-
-void AProjectile::BeginPlay()
-{
-	Super::BeginPlay();
-
-}
-
-void AProjectile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 void AProjectile::OnHit(AActor* other)
