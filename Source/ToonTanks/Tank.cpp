@@ -3,7 +3,9 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
+#include "Components/WidgetComponent.h"
 
+#include "HealthBar.h"
 #include "Projectile.h"
 
 ATank::ATank()
@@ -15,6 +17,8 @@ ATank::ATank()
 
 	TankTurret = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank Turret"));
 	TankTurret->SetupAttachment(TankHull);
+
+	MaxHealth = Health;
 }
 
 void ATank::Move(float Value)
@@ -63,6 +67,8 @@ void ATank::Shoot(FVector _origin)
 void ATank::ApplyDamage(float Damage)
 {
 	Health -= Damage;
+	OnDamageTaken();
+
 	if (Health > 0) return;
 	
 	// Destroy the actor its life fall below 0
@@ -76,4 +82,8 @@ void ATank::ApplyDamage(float Damage)
 		return;
 	}
 	UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
+}
+
+void ATank::OnDamageTaken()
+{
 }

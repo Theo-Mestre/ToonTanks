@@ -35,6 +35,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual float GetDamange() override { return Health; }
 
+	virtual void OnDamageTaken();
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank")
 	UStaticMeshComponent* TankHull;
@@ -47,6 +49,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank")
 	float Health = 100.f;
+	float MaxHealth = 100.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank")
 	float Speed = 100.f;
