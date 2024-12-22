@@ -1,7 +1,9 @@
 #include "PlayerTank.h"
 
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Projectile.h"
+#include "EnemyTank.h"
 
 APlayerTank::APlayerTank()
 	: ATank()
@@ -34,4 +36,15 @@ void APlayerTank::Aim(FVector Location)
 	FVector AimDirection = (Location - GetActorLocation()).GetSafeNormal();
 	AimDirection.Z = 0.0f;
 	TankTurret->SetWorldRotation(AimDirection.Rotation());
+}
+
+void APlayerTank::ApplyDamage(float Damage)
+{
+	ATank::ApplyDamage(Damage);
+
+	if (Health <= 0.0f)
+	{
+		// Game over
+		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+	}
 }

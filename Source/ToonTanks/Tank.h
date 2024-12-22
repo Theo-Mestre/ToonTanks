@@ -35,17 +35,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual float GetDamange() override { return Health; }
 
-	virtual void OnDamageTaken();
-
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank")
-	UStaticMeshComponent* TankHull;
+	UStaticMeshComponent* TankHull = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank")
-	UStaticMeshComponent* TankTurret;
+	UStaticMeshComponent* TankTurret = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank")
-	TSubclassOf<class AProjectile> ProjectileClass;
+	TSubclassOf<class AProjectile> ProjectileClass = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank")
 	float Health = 100.f;
@@ -58,8 +56,14 @@ protected:
 	float TraverseSpeed = 100.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank")
-	class USoundCue* ShotSound;
+	float DamagePerShot = 25.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank")
-	class USoundCue* DeathSound;
+	class USoundCue* ShotSound = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank")
+	class USoundCue* DeathSound = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tank")
+	class UParticleSystemComponent* ExplodeParticleSystem;
 };

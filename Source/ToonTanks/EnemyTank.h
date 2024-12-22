@@ -18,6 +18,8 @@ public:
 protected:
 	virtual void BeginPlay() override;	
 
+	virtual bool IsTargetInRange() const;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	ATank* TargetTanks = nullptr;

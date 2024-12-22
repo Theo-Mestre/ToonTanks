@@ -14,4 +14,5 @@ public:
 	virtual void Move(float Value) override;
 	virtual void RotateHull(float Value) override;
 	virtual void Aim(FVector Location) override;
+	virtual void ApplyDamage(float Damage) override;
 };

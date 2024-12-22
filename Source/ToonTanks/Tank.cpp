@@ -4,6 +4,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 #include "Components/WidgetComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 
 #include "HealthBar.h"
 #include "Projectile.h"
@@ -17,6 +18,10 @@ ATank::ATank()
 
 	TankTurret = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank Turret"));
 	TankTurret->SetupAttachment(TankHull);
+
+	ExplodeParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Explode Particle System"));
+	ExplodeParticleSystem->SetAutoActivate(false);
+	ExplodeParticleSystem->SetupAttachment(TankHull);
 
 	MaxHealth = Health;
 }
@@ -47,14 +52,13 @@ void ATank::Shoot(FVector _origin)
 	SpawnParams.Owner = GetOwner();
 	SpawnParams.Instigator = GetOwner()->GetInstigator();
 
-	UE_LOG(LogTemp, Warning, TEXT("Shooting at %s"), *_origin.ToString());
 	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, _origin, TankTurret->GetRelativeRotation() + GetActorRotation(), SpawnParams);
 
 	projectile->SetOwner(this);
 	projectile->SetInstigator(GetInstigator());
 	projectile->FireInDirection(-projectile->GetActorRightVector());
+	projectile->SetDamageValue(DamagePerShot);
 
-	// Play shot SFX
 	if (ShotSound == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("No shot sound set"));
@@ -67,11 +71,15 @@ void ATank::Shoot(FVector _origin)
 void ATank::ApplyDamage(float Damage)
 {
 	Health -= Damage;
-	OnDamageTaken();
 
 	if (Health > 0) return;
 	
 	// Destroy the actor its life fall below 0
+
+	if (ExplodeParticleSystem != nullptr)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, ExplodeParticleSystem->Template, GetActorLocation());
+	}
 
 	Destroy();
 	
@@ -82,8 +90,4 @@ void ATank::ApplyDamage(float Damage)
 		return;
 	}
 	UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
-}
-
-void ATank::OnDamageTaken()
-{
 }

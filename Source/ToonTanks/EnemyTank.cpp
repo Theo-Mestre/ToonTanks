@@ -11,6 +11,8 @@ void AEnemyTank::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (IsTargetInRange() == false) return;
+
 	Aim();
 	EngageTarget(DeltaTime);
 }
@@ -40,9 +42,6 @@ void AEnemyTank::EngageTarget(float DeltaTime)
 	TimeSinceLastShot += DeltaTime;
 	if (TimeSinceLastShot < FireRate) return;
 
-	FVector DistanceBetwenTanks = TargetTanks->GetActorLocation() - GetActorLocation();
-	if (DistanceBetwenTanks.Size() > Range) return;
-
 	FVector Origin = BillboardComponent->GetComponentLocation();
 	Shoot(Origin);
 	TimeSinceLastShot = 0.0f;
@@ -60,4 +59,10 @@ void AEnemyTank::BeginPlay()
 	}
 
 	BillboardComponent = FindComponentByClass<UBillboardComponent>();
+}
+
+bool AEnemyTank::IsTargetInRange() const
+{
+	FVector DistanceBetwenTanks = TargetTanks->GetActorLocation() - GetActorLocation();
+	return DistanceBetwenTanks.Size() < Range;
 }

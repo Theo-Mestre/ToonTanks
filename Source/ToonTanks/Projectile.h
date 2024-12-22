@@ -19,6 +19,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ApplyDamage(AActor* other);
 
+	void SetDamageValue(float Value) { Damage = Value; }
+	float GetDamageValue() const { return Damage; }
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile")
 	class UProjectileMovementComponent* ProjectileMovement;
